@@ -1,2 +1,4 @@
 A simple application to read data comming from a serial port. It uses 3 methods of reading and 2 types of output.
 It is made in c# on Visual Studio 11 Beta using .NET framework 3.0.
+
+It was made to read data from scanners and help to configure how they work with other apps.
