@@ -16,7 +16,7 @@ namespace SerialPortInspection {
 
 		#region Delegates
 		public delegate void AddListItem();
-		public AddListItem dlgAddResult;    //Usado para cambiar el nombre de la ventana
+		public AddListItem dlgAddResult;    //Used to change the from's name
 
 		public void addResult() {
 			try {
@@ -82,7 +82,7 @@ namespace SerialPortInspection {
 		}
 
 		private void txtInput_TextChanged(object sender, EventArgs e) {
-			string sPattern = @"^(&#\d{2};)+$";
+			string sPattern = @"^(\\u000[0-9a-fA-F])+$";
 			Regex rExp = new Regex(sPattern);
 			if (rExp.IsMatch(txtInput.Text)) {
 				pnlStatus.BackColor = Color.FromArgb(76, 184, 72);
@@ -131,8 +131,32 @@ namespace SerialPortInspection {
 			MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
+		//Paeses the string in port suffixm, to get the equivalent chars, from unicode \u0002 to string ☻
+		private string getStringValue(string sSuffix) {
+			int x = 0; string t = ""; string sReturn = ""; int code;
+			foreach (char c in sSuffix) {
+				if (x == 6) {
+					t = t.Replace(@"\u", "");
+					code = int.Parse(t, System.Globalization.NumberStyles.HexNumber);
+					sReturn += char.ConvertFromUtf32(code).ToString();
+					x = 0; t = c.ToString();
+				} else {
+					t += c;
+				}
+				x++;
+			}
+			t = t.Replace(@"\u", "");
+			if (t == "") {
+				return "";
+			} else {
+				code = int.Parse(t, System.Globalization.NumberStyles.HexNumber);
+				sReturn += char.ConvertFromUtf32(code).ToString();
+				return sReturn;
+			}
+		}
+
 		#region Read methods for the serial port
-		private void sp_readExisting() {
+		private void sp_readExisting() {			
 			if (rbtString.Checked) {
 				sRead = spPort.ReadExisting();
 			} else {
@@ -160,17 +184,13 @@ namespace SerialPortInspection {
 			if (pnlStatus.BackColor == Color.FromArgb(225, 44, 44)) {
 				displayError("Not a valid suffix");
 			} else {
-				string[] sSplit = txtInput.Text.Split(';');
-				string sSuffix = "";
-				foreach (string s in sSplit) {
-					string t = Regex.Replace(s, "[^0-9]*", "");
-					if (t.Length == 2) {
-						sSuffix += char.ConvertFromUtf32(int.Parse(t));
-					}
-				}
+				string suff = getStringValue(txtInput.Text);
 
-				if (sSuffix.Length > 0) {
-					spPort.NewLine = sSuffix;
+				if (suff.Length > 0) {
+					spPort.NewLine = suff;
+				} else {
+					displayError("Not a valid suffix");
+					return;
 				}
 
 				if (rbtString.Checked) {

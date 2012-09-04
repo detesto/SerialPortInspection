@@ -16,11 +16,11 @@ namespace SerialPortInspection {
 
 		private void lsbExamples_SelectedIndexChanged(object sender, EventArgs e) {
 			txtChar.Text = char.ConvertFromUtf32(lsbExamples.SelectedIndex);
-			txtString.Text = "&#" + lsbExamples.SelectedIndex.ToString("00") + ";";
+			txtString.Text = @"\u000" + lsbExamples.SelectedIndex.ToString("x");
 		}
 
 		private void txtInput_TextChanged(object sender, EventArgs e) {
-			string sPattern = @"^(&#\d{2};)+$";
+			string sPattern = @"^(\\u000[0-9a-fA-F])+$";
 			Regex rExp = new Regex(sPattern);
 			if (rExp.IsMatch(txtInput.Text)) {
 				pnlStatus.BackColor = Color.FromArgb(76, 184, 72);
@@ -49,7 +49,7 @@ namespace SerialPortInspection {
 
 		private void lsbExamples_MouseDoubleClick(object sender, MouseEventArgs e) {
 			pnlStatus.BackColor = Color.FromArgb(76, 184, 72);
-			txtInput.Text = "&#" + lsbExamples.SelectedIndex.ToString("00") + ";";
+			txtInput.Text = @"\u000" + lsbExamples.SelectedIndex.ToString("x");
 			this.Close();
 		}
 	}
