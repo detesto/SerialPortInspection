@@ -76,17 +76,18 @@
             this.btnOpenPortConnection.TabIndex = 2;
             this.btnOpenPortConnection.Text = "Open";
             this.btnOpenPortConnection.UseVisualStyleBackColor = true;
-            this.btnOpenPortConnection.Click += new System.EventHandler(this.btnOpen_Click);
+            this.btnOpenPortConnection.Click += new System.EventHandler(this.btnOpenPortConnection_Click);
             // 
             // btnClosePortConnection
             // 
+            this.btnClosePortConnection.Enabled = false;
             this.btnClosePortConnection.Location = new System.Drawing.Point(101, 65);
             this.btnClosePortConnection.Name = "btnClosePortConnection";
             this.btnClosePortConnection.Size = new System.Drawing.Size(75, 23);
             this.btnClosePortConnection.TabIndex = 3;
             this.btnClosePortConnection.Text = "Close";
             this.btnClosePortConnection.UseVisualStyleBackColor = true;
-            this.btnClosePortConnection.Click += new System.EventHandler(this.btnClose_Click);
+            this.btnClosePortConnection.Click += new System.EventHandler(this.btnClosePortConnection_Click);
             // 
             // lsbResults
             // 
@@ -277,7 +278,7 @@
             this.Name = "SerialInspection";
             this.Text = "Serial Port Inspection";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSerialInspection_FormClosing);
-            this.Shown += new System.EventHandler(this.frmSerialInspection_Shown);
+            this.Shown += new System.EventHandler(this.SerialInspection_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SerialInspection_KeyDown);
             this.gpbSerial.ResumeLayout(false);
             this.gpbSerial.PerformLayout();
