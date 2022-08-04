@@ -1,5 +1,5 @@
 ﻿namespace SerialPortInspection {
-	partial class frmHelp {
+	partial class SuffixHelpForm {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -23,7 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmHelp));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SuffixHelpForm));
 			this.lblText = new System.Windows.Forms.Label();
 			this.lsbExamples = new System.Windows.Forms.ListBox();
 			this.txtChar = new System.Windows.Forms.TextBox();

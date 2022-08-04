@@ -1,5 +1,5 @@
 ﻿namespace SerialPortInspection {
-	partial class SerialInspection {
+	partial class SerialInspectionForm {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -23,12 +23,12 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SerialInspection));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SerialInspectionForm));
             this.cmbAvailablePorts = new System.Windows.Forms.ComboBox();
             this.lblPort = new System.Windows.Forms.Label();
             this.btnOpenPortConnection = new System.Windows.Forms.Button();
             this.btnClosePortConnection = new System.Windows.Forms.Button();
-            this.lsbResults = new System.Windows.Forms.ListBox();
+            this.lsbScanLog = new System.Windows.Forms.ListBox();
             this.lblStatus = new System.Windows.Forms.Label();
             this.gpbSerial = new System.Windows.Forms.GroupBox();
             this.gpbScanMode = new System.Windows.Forms.GroupBox();
@@ -38,7 +38,7 @@
             this.rbtReadExisting = new System.Windows.Forms.RadioButton();
             this.rbtReadLine = new System.Windows.Forms.RadioButton();
             this.rbtRead = new System.Windows.Forms.RadioButton();
-            this.btnClear = new System.Windows.Forms.Button();
+            this.btnClearScanLog = new System.Windows.Forms.Button();
             this.pnlNewLine = new System.Windows.Forms.Panel();
             this.pnlStatus = new System.Windows.Forms.Panel();
             this.btnHelp = new System.Windows.Forms.Button();
@@ -89,16 +89,16 @@
             this.btnClosePortConnection.UseVisualStyleBackColor = true;
             this.btnClosePortConnection.Click += new System.EventHandler(this.btnClosePortConnection_Click);
             // 
-            // lsbResults
+            // lsbScanLog
             // 
-            this.lsbResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lsbScanLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lsbResults.FormattingEnabled = true;
-            this.lsbResults.Location = new System.Drawing.Point(12, 129);
-            this.lsbResults.Name = "lsbResults";
-            this.lsbResults.Size = new System.Drawing.Size(466, 147);
-            this.lsbResults.TabIndex = 4;
+            this.lsbScanLog.FormattingEnabled = true;
+            this.lsbScanLog.Location = new System.Drawing.Point(12, 129);
+            this.lsbScanLog.Name = "lsbScanLog";
+            this.lsbScanLog.Size = new System.Drawing.Size(466, 147);
+            this.lsbScanLog.TabIndex = 4;
             // 
             // lblStatus
             // 
@@ -201,16 +201,16 @@
             this.rbtRead.Text = "Read()";
             this.rbtRead.UseVisualStyleBackColor = true;
             // 
-            // btnClear
+            // btnClearScanLog
             // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(403, 285);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 23);
-            this.btnClear.TabIndex = 9;
-            this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClearScanLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearScanLog.Location = new System.Drawing.Point(403, 285);
+            this.btnClearScanLog.Name = "btnClearScanLog";
+            this.btnClearScanLog.Size = new System.Drawing.Size(75, 23);
+            this.btnClearScanLog.TabIndex = 9;
+            this.btnClearScanLog.Text = "Clear";
+            this.btnClearScanLog.UseVisualStyleBackColor = true;
+            this.btnClearScanLog.Click += new System.EventHandler(this.btnClearScanLog_Click);
             // 
             // pnlNewLine
             // 
@@ -260,22 +260,22 @@
             this.lblLine.TabIndex = 0;
             this.lblLine.Text = "Line End";
             // 
-            // SerialInspection
+            // SerialInspectionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(490, 321);
             this.Controls.Add(this.pnlNewLine);
-            this.Controls.Add(this.btnClear);
+            this.Controls.Add(this.btnClearScanLog);
             this.Controls.Add(this.gpbReadMode);
             this.Controls.Add(this.gpbScanMode);
             this.Controls.Add(this.gpbSerial);
             this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.lsbResults);
+            this.Controls.Add(this.lsbScanLog);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.Name = "SerialInspection";
+            this.Name = "SerialInspectionForm";
             this.Text = "Serial Port Inspection";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSerialInspection_FormClosing);
             this.Shown += new System.EventHandler(this.SerialInspection_Shown);
@@ -298,7 +298,7 @@
 		private System.Windows.Forms.Label lblPort;
 		private System.Windows.Forms.Button btnOpenPortConnection;
 		private System.Windows.Forms.Button btnClosePortConnection;
-		private System.Windows.Forms.ListBox lsbResults;
+		private System.Windows.Forms.ListBox lsbScanLog;
 		public System.Windows.Forms.ComboBox cmbAvailablePorts;
 		private System.Windows.Forms.Label lblStatus;
 		private System.Windows.Forms.GroupBox gpbSerial;
@@ -309,7 +309,7 @@
 		private System.Windows.Forms.RadioButton rbtReadExisting;
 		private System.Windows.Forms.RadioButton rbtReadLine;
 		private System.Windows.Forms.RadioButton rbtRead;
-		private System.Windows.Forms.Button btnClear;
+		private System.Windows.Forms.Button btnClearScanLog;
 		private System.Windows.Forms.Panel pnlNewLine;
 		private System.Windows.Forms.Button btnHelp;
 		private System.Windows.Forms.TextBox txtInput;

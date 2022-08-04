@@ -8,9 +8,9 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
 namespace SerialPortInspection {
-	public partial class frmHelp : Form {
+	public partial class SuffixHelpForm : Form {
 		public string sReturnSuffix;
-		public frmHelp() {
+		public SuffixHelpForm() {
 			InitializeComponent();
 		}
 

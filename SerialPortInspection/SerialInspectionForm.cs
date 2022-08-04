@@ -7,28 +7,27 @@ using System.Text.RegularExpressions;
 
 namespace SerialPortInspection
 {
-	public partial class SerialInspection : Form
+	public partial class SerialInspectionForm : Form
 	{
 		private SerialPort _serialPort = new SerialPort();
 		private string _scannerPort;
-		//private string _scannerData = "X";
 
 		#region Delegates
 		private delegate void AddListItem(string scannerData);
-		private AddListItem dlgAddResult;    //Used to change the from's name
+		private AddListItem AddResultDelegate;    //Used to change the from's name in cross-thread
 
 		private void AddResult(string scannerData)
 		{
-            if (string.IsNullOrWhiteSpace(scannerData))
-            {
+			if (string.IsNullOrWhiteSpace(scannerData))
+			{
 				return;
-            }
+			}
 
 			try
 			{
-				lsbResults.Items.Add(scannerData);
-				lsbResults.SelectedIndex = lsbResults.Items.Count - 1;
-				lsbResults.SelectedIndex = -1;
+				lsbScanLog.Items.Add(scannerData);
+				lsbScanLog.SelectedIndex = lsbScanLog.Items.Count - 1;
+				lsbScanLog.SelectedIndex = -1;
 			}
 			catch (Exception ex)
 			{
@@ -38,15 +37,15 @@ namespace SerialPortInspection
 		#endregion
 
 		#region Form Methods
-		public SerialInspection()
+		public SerialInspectionForm()
 		{
 			InitializeComponent();
-			dlgAddResult = new AddListItem(AddResult);
+			AddResultDelegate = new AddListItem(AddResult);
 		}
 
 		private void SerialInspection_Shown(object sender, EventArgs e)
 		{
-			string[] ports = SerialPort.GetPortNames();
+			var ports = SerialPort.GetPortNames();
 
 			if (ports.Length == 0)
 			{
@@ -80,7 +79,7 @@ namespace SerialPortInspection
 				_serialPort.Open();
 
 				lblStatus.Text = cmbAvailablePorts.SelectedItem.ToString() + " is open";
-				
+
 				btnOpenPortConnection.Enabled = false;
 				btnClosePortConnection.Enabled = true;
 			}
@@ -111,8 +110,9 @@ namespace SerialPortInspection
 
 		private void txtInput_TextChanged(object sender, EventArgs e)
 		{
-			string sPattern = @"^(\\u000[0-9a-fA-F])+$";
+			var sPattern = @"^(\\u000[0-9a-fA-F])+$";
 			Regex rExp = new Regex(sPattern);
+
 			if (rExp.IsMatch(txtInput.Text))
 			{
 				pnlStatus.BackColor = Color.FromArgb(76, 184, 72);
@@ -134,9 +134,9 @@ namespace SerialPortInspection
 			catch { }
 		}
 
-		private void btnClear_Click(object sender, EventArgs e)
+		private void btnClearScanLog_Click(object sender, EventArgs e)
 		{
-			lsbResults.Items.Clear();
+			lsbScanLog.Items.Clear();
 		}
 
 		private void rbtReadLine_CheckedChanged(object sender, EventArgs e)
@@ -146,7 +146,7 @@ namespace SerialPortInspection
 
 		private void btnHelp_Click(object sender, EventArgs e)
 		{
-			using (frmHelp fmH = new frmHelp())
+			using (var fmH = new SuffixHelpForm())
 			{
 				fmH.ShowDialog();
 				txtInput.Text = fmH.sReturnSuffix;
@@ -158,9 +158,9 @@ namespace SerialPortInspection
 		{
 			if (e.Control && e.KeyCode == Keys.C)
 			{
-				if (lsbResults.SelectedItems.Count > 0)
+				if (lsbScanLog.SelectedItems.Count > 0)
 				{
-					Clipboard.SetText(lsbResults.SelectedItem.ToString());
+					Clipboard.SetText(lsbScanLog.SelectedItem.ToString());
 				}
 			}
 		}
@@ -182,7 +182,7 @@ namespace SerialPortInspection
 			{
 				scannerData = sp_readLine();
 			}
-			Invoke(dlgAddResult, scannerData);
+			Invoke(AddResultDelegate, scannerData);
 		}
 
 		private void DisplayError(string msg)
@@ -305,6 +305,5 @@ namespace SerialPortInspection
 			return scannerData;
 		}
 		#endregion
-
 	}
 }

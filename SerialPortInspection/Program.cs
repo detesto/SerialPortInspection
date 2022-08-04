@@ -11,7 +11,7 @@ namespace SerialPortInspection {
 		static void Main() {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new SerialInspection());
+			Application.Run(new SerialInspectionForm());
 		}
 	}
 }
