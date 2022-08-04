@@ -227,7 +227,7 @@
             // 
             // pnlStatus
             // 
-            this.pnlStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(184)))), ((int)(((byte)(72)))));
+            this.pnlStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.pnlStatus.Location = new System.Drawing.Point(146, 7);
             this.pnlStatus.Name = "pnlStatus";
             this.pnlStatus.Size = new System.Drawing.Size(15, 15);

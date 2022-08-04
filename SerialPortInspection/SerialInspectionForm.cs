@@ -9,8 +9,10 @@ namespace SerialPortInspection
 {
 	public partial class SerialInspectionForm : Form
 	{
-		private SerialPort _serialPort = new SerialPort();
+		private SerialPort _serialPort;
 		private string _scannerPort;
+
+		private bool _validPrefix;
 
 		#region Delegates
 		private delegate void AddListItem(string scannerData);
@@ -36,13 +38,17 @@ namespace SerialPortInspection
 		}
 		#endregion
 
-		#region Form Methods
 		public SerialInspectionForm()
 		{
 			InitializeComponent();
+
+			_serialPort = new SerialPort();
+			_validPrefix = false;
+
 			AddResultDelegate = new AddListItem(AddResult);
 		}
 
+		#region Form Methods
 		private void SerialInspection_Shown(object sender, EventArgs e)
 		{
 			var ports = SerialPort.GetPortNames();
@@ -97,7 +103,7 @@ namespace SerialPortInspection
 			{
 				_serialPort.Close();
 				_serialPort.Dispose();
-				lblStatus.Text = "Port " + _scannerPort + "closed...";
+				lblStatus.Text = "Port " + _scannerPort + " closed...";
 
 				btnOpenPortConnection.Enabled = true;
 				btnClosePortConnection.Enabled = false;
@@ -153,7 +159,6 @@ namespace SerialPortInspection
 			}
 		}
 
-
 		private void SerialInspection_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.C)
@@ -172,16 +177,17 @@ namespace SerialPortInspection
 
 			if (rbtReadExisting.Checked)
 			{
-				scannerData = sp_readExisting();
+				scannerData = ScannerReadExisting();
 			}
 			else if (rbtRead.Checked)
 			{
-				scannerData = sp_read();
+				scannerData = ScannerRead();
 			}
 			else if (rbtReadLine.Checked)
 			{
-				scannerData = sp_readLine();
+				scannerData = ScannerReadLine();
 			}
+
 			Invoke(AddResultDelegate, scannerData);
 		}
 
@@ -190,10 +196,11 @@ namespace SerialPortInspection
 			MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
-		//Paeses the string in port suffixm, to get the equivalent chars, from unicode \u0002 to string ☻
-		private string getStringValue(string sSuffix)
+		//Paeses the string in port suffix to get the equivalent chars, from unicode \u0002 to string ☻
+		private string GetStringValue(string sSuffix)
 		{
 			int x = 0; string t = ""; string sReturn = ""; int code;
+			
 			foreach (char c in sSuffix)
 			{
 				if (x == 6)
@@ -223,27 +230,22 @@ namespace SerialPortInspection
 		}
 
 		#region Read methods for the serial port
-		private string sp_readExisting()
+		private string ScannerReadExisting()
 		{
-			var scannerData = string.Empty;
+			var scannerData = _serialPort.ReadExisting();
 
-			if (rbtString.Checked)
+			if (rbtByte.Checked)
 			{
-				scannerData = _serialPort.ReadExisting();
-			}
-			else
-			{
-				byte[] data = Encoding.ASCII.GetBytes(_serialPort.ReadExisting());
-				foreach (byte d in data)
-				{
-					scannerData += "[" + d.ToString() + "]";
-				}
+				var data = Encoding.ASCII.GetBytes(scannerData);
+				var bytes = BitConverter.ToString(data);
+
+				scannerData = bytes.ToString().Replace("-", " ");
 			}
 
 			return scannerData;
 		}
 
-		private string sp_read()
+		private string ScannerRead()
 		{
 			var scannerData = string.Empty;
 			var data = new byte[_serialPort.BytesToRead];
@@ -256,26 +258,25 @@ namespace SerialPortInspection
 			}
 			else
 			{
-				foreach (byte d in data)
-				{
-					scannerData += "[" + d.ToString() + "]";
-				}
+				var bytes = BitConverter.ToString(data);
+
+				scannerData = bytes.ToString().Replace("-", " ");
 			}
 
 			return scannerData;
 		}
 
-		private string sp_readLine()
+		private string ScannerReadLine()
 		{
 			var scannerData = string.Empty;
 
-			if (pnlStatus.BackColor == Color.FromArgb(225, 44, 44))
+			if (!_validPrefix)
 			{
 				DisplayError("Not a valid suffix");
 			}
 			else
 			{
-				string suff = getStringValue(txtInput.Text);
+				var suff = GetStringValue(txtInput.Text);
 
 				if (suff.Length > 0)
 				{
@@ -294,11 +295,9 @@ namespace SerialPortInspection
 				else
 				{
 					var data = Encoding.ASCII.GetBytes(_serialPort.ReadLine());
+					var bytes = BitConverter.ToString(data);
 
-					foreach (byte d in data)
-					{
-						scannerData += "[" + d.ToString() + "]";
-					}
+					scannerData = bytes.ToString().Replace("-", " ");
 				}
 			}
 
